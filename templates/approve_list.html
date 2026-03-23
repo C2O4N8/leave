@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html data-scale="true" class=" " style="font-size: 85.3333px;">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="{{ url_for('static', filename='umi.1f521cdb.css') }}">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+
+  <script>
+    window.routerBase = "/";
+    var win = window;
+    window.vl = function(baseFontSize, psdWidth, maxWidth) {
+      var _baseFontSize = baseFontSize || 100;
+      var _psdWidth = psdWidth || 750;
+      var _maxWidth = maxWidth || 640;
+      var doc = win.document;
+      var docEl = doc.documentElement;
+      var setFontSize = function() {
+        var clientWidth = docEl.clientWidth;
+        clientWidth = clientWidth > _maxWidth ? _maxWidth : clientWidth;
+        docEl.style.fontSize = `${(_baseFontSize / _psdWidth) * clientWidth}px`;
+      };
+      setFontSize();
+      var resizeEvt = "orientationchange" in window ? "orientationchange" : "resize";
+      win.addEventListener(resizeEvt, setFontSize, false);
+      doc.addEventListener("DOMContentLoaded", setFontSize, false);
+    };
+    vl(100, 750);
+  </script>
+
+  <title>请假审批</title>
+
+  <!-- 管理员审批页面 - 自由设计CSS样式 -->
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; }
+    
+    .admin-header { background: #1890ff; color: white; padding: 16px; text-align: center; position: relative; }
+    .admin-header h1 { font-size: 24px; font-weight: 600; }
+    .admin-back-btn { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.5); color: white; padding: 8px 12px; border-radius: 4px; text-decoration: none; cursor: pointer; transition: background 0.3s; }
+    .admin-back-btn:hover { background: rgba(255,255,255,0.3); }
+    
+    .admin-container { max-width: 1200px; margin: 0 auto; padding: 16px; }
+    
+    .filter-bar { background: white; padding: 16px; margin-bottom: 16px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .filter-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn { padding: 8px 16px; border: 1px solid #d9d9d9; background: white; border-radius: 4px; cursor: pointer; transition: all 0.3s; }
+    .filter-btn.active { background: #1890ff; color: white; border-color: #1890ff; }
+    .filter-btn:hover { border-color: #1890ff; }
+    
+    .list-container { background: white; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; }
+    .list-item { padding: 16px; border-bottom: 1px solid #f0f0f0; transition: background 0.3s; }
+    .list-item:hover { background: #fafafa; }
+    .list-item:last-child { border-bottom: none; }
+    
+    .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .item-title { font-size: 16px; font-weight: 600; }
+    .item-status { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+    .status-pending { background: #ffc069; color: white; }
+    .status-approved { background: #52c41a; color: white; }
+    .status-rejected { background: #ff4d4f; color: white; }
+    
+    .item-details { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .detail-item { font-size: 14px; }
+    .detail-label { color: #666; }
+    .detail-value { color: #333; font-weight: 500; margin-top: 4px; }
+    
+    .item-actions { display: flex; gap: 8px; justify-content: flex-end; }
+    .action-btn { padding: 6px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.3s; }
+    .btn-primary { background: #1890ff; color: white; }
+    .btn-primary:hover { background: #40a9ff; }
+    .btn-danger { background: #ff4d4f; color: white; }
+    .btn-danger:hover { background: #ff7875; }
+    .btn-success { background: #52c41a; color: white; }
+    .btn-success:hover { background: #73d13d; }
+    
+    .empty-state { text-align: center; padding: 60px 20px; }
+    .empty-icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-text { color: #999; font-size: 14px; }
+    
+    .pagination { display: flex; justify-content: center; gap: 8px; padding: 16px; }
+    .pagination-btn { padding: 6px 12px; border: 1px solid #d9d9d9; background: white; border-radius: 4px; cursor: pointer; }
+    .pagination-btn.active { background: #1890ff; color: white; border-color: #1890ff; }
+    
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.45); z-index: 1000; }
+    .modal-overlay.show { display: flex; align-items: center; justify-content: center; }
+    
+    .modal { background: white; border-radius: 4px; padding: 24px; max-width: 400px; width: 90%; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .modal-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+    .modal-textarea { width: 100%; padding: 8px; border: 1px solid #d9d9d9; border-radius: 4px; font-family: inherit; resize: vertical; min-height: 100px; }
+    .modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <div class="admin-header">
+    <a href="/admin_dashboard" class="admin-back-btn">← 返回</a>
+    <h1>请假审批管理</h1>
+  </div>
+
+  <div class="admin-container">
+    <!-- 筛选栏 -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <button class="filter-btn active" onclick="filterByStatus('all')">全部</button>
+        <button class="filter-btn" onclick="filterByStatus('pending')">待审批</button>
+        <button class="filter-btn" onclick="filterByStatus('approved')">已通过</button>
+        <button class="filter-btn" onclick="filterByStatus('rejected')">已拒绝</button>
+      </div>
+    </div>
+
+    <!-- 列表容器 -->
+    <div class="list-container" id="list-container">
+      {% if leaves|length == 0 %}
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <div class="empty-text">暂无请假申请</div>
+      </div>
+      {% else %}
+      {% for leave in leaves %}
+      <div class="list-item" data-status="{{ leave['status'] }}">
+        <div class="item-header">
+          <div class="item-title">{{ leave['leave_type_display'] }}</div>
+          <div class="item-status" style="background-color: {% if leave['status'] == 'pending' %}#ffc069{% elif leave['status'] == 'approved' %}#52c41a{% else %}#ff4d4f{% endif %};">
+            {{ leave['status_display'] }}
+          </div>
+        </div>
+
+        <div class="item-details">
+          <div class="detail-item">
+            <div class="detail-label">申请人</div>
+            <div class="detail-value">{{ leave.get('student_name', '未知') }}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">学号</div>
+            <div class="detail-value">{{ leave.get('student_id', '未知') }}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">开始时间</div>
+            <div class="detail-value">{{ leave['start_date'] }} {{ leave['start_time'] }}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">结束时间</div>
+            <div class="detail-value">{{ leave['end_date'] }} {{ leave['end_time'] }}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">请假去向</div>
+            <div class="detail-value">{{ leave.get('destination', '未填写') }}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">申请时间</div>
+            <div class="detail-value">{{ leave['created_at'] }}</div>
+          </div>
+        </div>
+
+        {% if leave['status'] == 'pending' %}
+        <div class="item-actions">
+          <button class="action-btn btn-success" onclick="approveLeave({{ leave['id'] }})">批准</button>
+          <button class="action-btn btn-danger" onclick="rejectLeave({{ leave['id'] }})">拒绝</button>
+          <button class="action-btn btn-primary" onclick="viewDetails({{ leave['id'] }})">查看详情</button>
+        </div>
+        {% else %}
+        <div class="item-actions">
+          <button class="action-btn btn-primary" onclick="viewDetails({{ leave['id'] }})">查看详情</button>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- 审批意见模态框 -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-title" id="modal-title"></div>
+      <textarea class="modal-textarea" id="approval-remarks" placeholder="请输入审批意见（可选）"></textarea>
+      <div class="modal-footer">
+        <button class="action-btn" style="border: 1px solid #d9d9d9; background: white; color: #333;" onclick="closeModal()">取消</button>
+        <button class="action-btn btn-success" onclick="submitApproval()">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentLeaveId = null;
+    let currentAction = null;
+
+    function filterByStatus(status) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      const items = document.querySelectorAll('.list-item');
+      items.forEach(item => {
+        if (status === 'all' || item.dataset.status === status) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    function approveLeave(leaveId) {
+      currentLeaveId = leaveId;
+      currentAction = 'approve';
+      document.getElementById('modal-title').textContent = '批准请假申请';
+      document.getElementById('approval-remarks').value = '';
+      document.getElementById('modal-overlay').classList.add('show');
+    }
+
+    function rejectLeave(leaveId) {
+      currentLeaveId = leaveId;
+      currentAction = 'reject';
+      document.getElementById('modal-title').textContent = '拒绝请假申请';
+      document.getElementById('approval-remarks').value = '';
+      document.getElementById('modal-overlay').classList.add('show');
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('show');
+    }
+
+    function submitApproval() {
+      const remarks = document.getElementById('approval-remarks').value;
+      const status = currentAction === 'approve' ? 'approved' : 'rejected';
+      
+      fetch('/approve', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `leave_id=${currentLeaveId}&status=${status}&remarks=${encodeURIComponent(remarks)}`
+      }).then(response => {
+        if (response.ok) {
+          alert('操作成功');
+          location.reload();
+        } else {
+          alert('操作失败');
+        }
+      });
+    }
+
+    function viewDetails(leaveId) {
+      window.location.href = `/detail/${leaveId}`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>验证注册</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .logo p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            padding: 12px;
+            background-color: #fadbd8;
+            border-left: 4px solid #e74c3c;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .success {
+            color: #27ae60;
+            font-size: 14px;
+            padding: 12px;
+            background-color: #d5f4e6;
+            border-left: 4px solid #27ae60;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box {
+            background-color: #ecf0f1;
+            border-left: 4px solid #3498db;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+        
+        button, .button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background-color: #ecf0f1;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d5dbdb;
+        }
+        
+        .instructions {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .instructions h4 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 6px;
+        }
+        
+        .username-display {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>验证注册</h1>
+            <p>请完成注册验证以启用您的账号</p>
+        </div>
+        
+        {% if error %}
+        <div class="error">
+            <strong>错误：</strong> {{ error }}
+        </div>
+        {% endif %}
+        
+        <div class="username-display">
+            用户名: <strong>{{ username }}</strong>
+        </div>
+        
+        <div class="instructions">
+            <h4>验证步骤：</h4>
+            <ol>
+                <li>联系管理员获取注册秘钥</li>
+                <li>将秘钥填写在下面的表单中</li>
+                <li>点击"验证"按钮完成注册</li>
+                <li>验证成功后即可登录系统</li>
+            </ol>
+        </div>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label for="verification_key">注册秘钥 <span style="color: #e74c3c;">*</span></label>
+                <input type="text" id="verification_key" name="verification_key" 
+                       placeholder="请输入管理员生成的秘钥" required autofocus>
+                <small style="display: block; margin-top: 6px; color: #666;">
+                    秘钥是一个64位的十六进制字符串
+                </small>
+            </div>
+            
+            <div class="button-group">
+                <button type="submit" class="btn-primary">验证</button>
+                <a href="{{ url_for('register') }}" class="button btn-secondary">返回注册</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

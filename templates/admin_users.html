@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户管理 - 请假系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .search-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .search-select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 10px 30px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245,87,108,0.4);
+        }
+        
+        .users-table {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .table-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .stats {
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f9f9f9;
+        }
+        
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+        
+        tbody tr:hover {
+            background: #fafafa;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-verified {
+            background: #e6f7ff;
+            color: #1890ff;
+        }
+        
+        .status-pending {
+            background: #fff7e6;
+            color: #fa8c16;
+        }
+        
+        .status-rejected {
+            background: #fff1f0;
+            color: #ff4d4f;
+        }
+        
+        .role-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .role-admin {
+            background: #f9f0ff;
+            color: #722ed1;
+        }
+        
+        .role-student {
+            background: #e6f7ff;
+            color: #1890ff;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-lock {
+            background: #fff7e6;
+            color: #fa8c16;
+        }
+        
+        .btn-lock:hover {
+            background: #ffd591;
+        }
+        
+        .btn-unlock {
+            background: #e6f7ff;
+            color: #1890ff;
+        }
+        
+        .btn-unlock:hover {
+            background: #91d5ff;
+        }
+        
+        .btn-delete {
+            background: #fff1f0;
+            color: #ff4d4f;
+        }
+        
+        .btn-delete:hover {
+            background: #ffccc7;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        
+        .empty-state svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+        
+        /* 确认对话框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .modal-content h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .modal-content p {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .btn-cancel {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .btn-cancel:hover {
+            background: #e0e0e0;
+        }
+        
+        .btn-confirm {
+            background: #ff4d4f;
+            color: white;
+        }
+        
+        .btn-confirm:hover {
+            background: #ff7875;
+        }
+        
+        .message {
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .message.show {
+            display: block;
+        }
+        
+        .message-success {
+            background: #f6ffed;
+            border: 1px solid #b7eb8f;
+            color: #52c41a;
+        }
+        
+        .message-error {
+            background: #fff1f0;
+            border: 1px solid #ffccc7;
+            color: #ff4d4f;
+        }
+        
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
+            
+            .users-table {
+                overflow-x: auto;
+            }
+            
+            table {
+                min-width: 800px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>用户管理</h1>
+            <div class="nav-buttons">
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">返回面板</a>
+                <a href="{{ url_for('approve_list') }}" class="btn btn-secondary">审批管理</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div id="message" class="message"></div>
+        
+        <div class="search-bar">
+            <form method="GET" action="{{ url_for('admin_users') }}" class="search-form">
+                <input 
+                    type="text" 
+                    name="search" 
+                    class="search-input" 
+                    placeholder="搜索用户名、姓名、学号、电话、院系..." 
+                    value="{{ search_query or '' }}"
+                >
+                <select name="status" class="search-select">
+                    <option value="">全部状态</option>
+                    <option value="verified" {% if status_filter == 'verified' %}selected{% endif %}>已验证</option>
+                    <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>待验证</option>
+                    <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>已锁定</option>
+                </select>
+                <button type="submit" class="btn btn-primary">搜索</button>
+                <a href="{{ url_for('admin_users') }}" class="btn btn-secondary">重置</a>
+            </form>
+        </div>
+        
+        <div class="users-table">
+            <div class="table-header">
+                <h2>用户列表</h2>
+                <div class="stats">
+                    共找到 <strong>{{ users|length }}</strong> 位用户
+                </div>
+            </div>
+            
+            {% if users %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>用户名</th>
+                        <th>姓名</th>
+                        <th>学号</th>
+                        <th>院系</th>
+                        <th>角色</th>
+                        <th>状态</th>
+                        <th>注册时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td>{{ u.id }}</td>
+                        <td>{{ u.username }}</td>
+                        <td>{{ u.name or '-' }}</td>
+                        <td>{{ u.student_id or '-' }}</td>
+                        <td>{{ u.department or '-' }}</td>
+                        <td>
+                            {% if u.role == 'admin' %}
+                            <span class="role-badge role-admin">管理员</span>
+                            {% else %}
+                            <span class="role-badge role-student">学生</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if u.status == 'verified' %}
+                            <span class="status-badge status-verified">已验证</span>
+                            {% elif u.status == 'pending' %}
+                            <span class="status-badge status-pending">待验证</span>
+                            {% else %}
+                            <span class="status-badge status-rejected">已锁定</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ u.created_at.strftime('%Y-%m-%d') if u.created_at else '-' }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                {% if u.role != 'admin' and u.id != current_user.id %}
+                                    {% if u.status == 'verified' %}
+                                    <button class="btn-small btn-lock" onclick="toggleUserStatus({{ u.id }}, '{{ u.name }}')">
+                                        锁定
+                                    </button>
+                                    {% elif u.status == 'rejected' %}
+                                    <button class="btn-small btn-unlock" onclick="toggleUserStatus({{ u.id }}, '{{ u.name }}')">
+                                        解锁
+                                    </button>
+                                    {% endif %}
+                                    <button class="btn-small btn-delete" onclick="confirmDelete({{ u.id }}, '{{ u.name }}')">
+                                        删除
+                                    </button>
+                                {% else %}
+                                    <span style="color: #999;">-</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <svg viewBox="0 0 64 64" fill="currentColor">
+                    <path d="M32,2A30,30,0,1,0,62,32,30,30,0,0,0,32,2Zm0,58A28,28,0,1,1,60,32,28,28,0,0,1,32,60Z"/>
+                    <circle cx="32" cy="32" r="4"/>
+                    <path d="M32,14a2,2,0,0,0-2,2V32a2,2,0,0,0,4,0V16A2,2,0,0,0,32,14Z"/>
+                </svg>
+                <p>没有找到匹配的用户</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- 删除确认对话框 -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3>确认删除用户</h3>
+            <p>确定要删除用户 <strong id="deleteUserName"></strong> 吗？</p>
+            <p style="color: #ff4d4f; font-size: 13px;">⚠️ 此操作将永久删除该用户及其所有请假记录,无法恢复!</p>
+            <div class="modal-buttons">
+                <button class="btn btn-small btn-cancel" onclick="closeDeleteModal()">取消</button>
+                <button class="btn btn-small btn-confirm" onclick="executeDelete()">确认删除</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let pendingDeleteUserId = null;
+        
+        function showMessage(text, type = 'success') {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message message-${type} show`;
+            setTimeout(() => {
+                messageDiv.className = 'message';
+            }, 3000);
+        }
+        
+        function toggleUserStatus(userId, userName) {
+            if (!confirm(`确定要切换用户 ${userName} 的状态吗?`)) {
+                return;
+            }
+            
+            fetch(`/admin/users/${userId}/toggle_status`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(data.message, 'success');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showMessage(data.error || '操作失败', 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('操作失败: ' + error.message, 'error');
+            });
+        }
+        
+        function confirmDelete(userId, userName) {
+            pendingDeleteUserId = userId;
+            document.getElementById('deleteUserName').textContent = userName;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+        
+        function closeDeleteModal() {
+            pendingDeleteUserId = null;
+            document.getElementById('deleteModal').classList.remove('show');
+        }
+        
+        function executeDelete() {
+            if (!pendingDeleteUserId) return;
+            
+            fetch(`/admin/users/${pendingDeleteUserId}/delete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                closeDeleteModal();
+                if (data.success) {
+                    showMessage(data.message, 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showMessage(data.error || '删除失败', 'error');
+                }
+            })
+            .catch(error => {
+                closeDeleteModal();
+                showMessage('删除失败: ' + error.message, 'error');
+            });
+        }
+        
+        // 点击对话框外部关闭
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeleteModal();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导入历史请假记录</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 40px;
+            border: 2px dashed #1890ff;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+
+        .file-input-label:hover {
+            border-color: #40a9ff;
+            background: #f0f5ff;
+        }
+
+        .file-input-label.has-file {
+            border-color: #52c41a;
+            background: #f6ffed;
+            color: #52c41a;
+        }
+
+        .file-input-label svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 12px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.6;
+        }
+
+        .file-input-label .text {
+            font-size: 14px;
+            color: #1890ff;
+        }
+
+        .file-input-label.has-file .text {
+            color: #52c41a;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .tips {
+            margin-top: 16px;
+            padding: 12px;
+            background: #e6f7ff;
+            border-left: 4px solid #1890ff;
+            border-radius: 2px;
+            font-size: 12px;
+            color: #0050b3;
+            line-height: 1.6;
+        }
+
+        .tips strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .tips ul {
+            margin-left: 20px;
+        }
+
+        .tips li {
+            margin-bottom: 4px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit {
+            background: #1890ff;
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background: #40a9ff;
+        }
+
+        .btn-submit:disabled {
+            background: #d9d9d9;
+            cursor: not-allowed;
+        }
+
+        .btn-back {
+            background: #fafafa;
+            color: #333;
+            border: 1px solid #d9d9d9;
+        }
+
+        .btn-back:hover {
+            border-color: #40a9ff;
+            color: #1890ff;
+        }
+
+        .alert {
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .alert-error {
+            background: #fff2f0;
+            border: 1px solid #ffccc7;
+            color: #cf1322;
+        }
+
+        .alert-success {
+            background: #f6ffed;
+            border: 1px solid #b7eb8f;
+            color: #274701;
+        }
+
+        .result-summary {
+            background: #fafafa;
+            border: 1px solid #e8e8e8;
+            border-radius: 4px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .result-summary .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .result-summary .item:last-child {
+            border-bottom: none;
+        }
+
+        .result-summary .label {
+            font-weight: 500;
+            color: #666;
+        }
+
+        .result-summary .value {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .result-summary .value.success {
+            color: #52c41a;
+        }
+
+        .result-summary .value.error {
+            color: #ff7875;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #1890ff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .nav-back:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .button-group {
+                flex-direction: column-reverse;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('user_dashboard') }}" class="nav-back">← 返回面板</a>
+
+        <div class="header">
+            <h1>导入历史请假记录</h1>
+            <p>将之前的请假记录HTML文件导入系统</p>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-error">
+            <strong>导入失败</strong><br>
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if success %}
+        <div class="alert alert-success">
+            <strong>导入成功！</strong><br>
+            已成功导入请假记录到系统
+        </div>
+
+        <div class="result-summary">
+            <div class="item">
+                <span class="label">总计记录数：</span>
+                <span class="value">{{ total_count }}</span>
+            </div>
+            <div class="item">
+                <span class="label">导入成功：</span>
+                <span class="value success">{{ success_count }}</span>
+            </div>
+            <div class="item">
+                <span class="label">导入失败（重复）：</span>
+                <span class="value error">{{ fail_count }}</span>
+            </div>
+        </div>
+
+        <div class="button-group" style="margin-top: 30px;">
+            <a href="{{ url_for('user_dashboard') }}" style="text-decoration: none;">
+                <button class="btn-back">返回面板</button>
+            </a>
+            <button class="btn-submit" onclick="location.reload()">继续导入</button>
+        </div>
+        {% else %}
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="html_file">选择HTML文件</label>
+                <div class="file-input-wrapper">
+                    <label for="html_file" class="file-input-label" id="fileLabel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <div class="text">
+                            <span id="fileName">点击或拖拽上传HTML文件</span>
+                        </div>
+                    </label>
+                    <input type="file" id="html_file" name="html_file" accept=".html" onchange="updateFileName(this)">
+                </div>
+
+                <div class="tips">
+                    <strong>如何获取HTML文件：</strong>
+                    <ul>
+                        <li>1. 打开原系统的请假列表页面</li>
+                        <li>2. 按 <code>Ctrl+S</code> (Windows) 或 <code>Cmd+S</code> (Mac) 保存页面</li>
+                        <li>3. 选择"保存为HTML文件"</li>
+                        <li>4. 在此上传保存的文件</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <a href="{{ url_for('user_dashboard') }}" style="text-decoration: none;">
+                    <button type="button" class="btn-back">返回</button>
+                </a>
+                <button type="submit" class="btn-submit" id="submitBtn" disabled>导入记录</button>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('html_file');
+        const fileLabel = document.getElementById('fileLabel');
+        const fileName = document.getElementById('fileName');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // 文件选择
+        fileInput.addEventListener('change', function(e) {
+            updateFileName(this);
+        });
+
+        // 拖拽上传
+        fileLabel.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.style.background = '#e6f7ff';
+        });
+
+        fileLabel.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.style.background = '';
+        });
+
+        fileLabel.addEventListener('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.style.background = '';
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                updateFileName(fileInput);
+            }
+        });
+
+        function updateFileName(input) {
+            if (input.files && input.files.length > 0) {
+                const file = input.files[0];
+
+                // 检查文件格式
+                if (!file.name.endsWith('.html')) {
+                    alert('请上传HTML文件');
+                    input.value = '';
+                    fileLabel.classList.remove('has-file');
+                    fileName.textContent = '点击或拖拽上传HTML文件';
+                    submitBtn.disabled = true;
+                    return;
+                }
+
+                fileLabel.classList.add('has-file');
+                fileName.textContent = `已选择: ${file.name}`;
+                submitBtn.disabled = false;
+            } else {
+                fileLabel.classList.remove('has-file');
+                fileName.textContent = '点击或拖拽上传HTML文件';
+                submitBtn.disabled = true;
+            }
+        }
+    </script>
+</body>
+</html>

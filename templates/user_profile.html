@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>完善个人信息</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='umi.1f521cdb.css') }}">
+  <style>
+    * { box-sizing: border-box; }
+    :root { --primary: #1890ff; --muted: #666; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: #f7f9fc; color: #222; margin: 0; padding: 0; }
+    .container { max-width: 760px; margin: 28px auto; background: #fff; padding: 28px; border-radius: 10px; box-shadow: 0 8px 30px rgba(20,20,40,0.06); }
+    .form-title { font-size: 20px; font-weight: 700; color: #111; border-left: 4px solid var(--primary); padding-left: 12px; margin-bottom: 18px; margin-top: 0; }
+    .subtitle { color: var(--muted); margin-bottom: 18px; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 16px; width: 100%; }
+    .field { margin-bottom: 0; display: flex; flex-direction: column; }
+    label { display: block; color: #444; font-weight: 600; margin-bottom: 8px; font-size: 15px; }
+    input[type="text"], select, input[type="tel"] { width: 100%; max-width: 100%; padding: 12px 14px; border: 1px solid #e6e9ef; border-radius: 8px; font-size: 15px; color: #222; background: #fff; box-sizing: border-box; display: block; }
+    input[disabled], select[disabled] { background: #f2f4f7; color: #999; cursor: not-allowed; }
+    .single { grid-column: 1 / -1; }
+    .button_row { display: flex; gap: 12px; margin-top: 28px; }
+    .btn { flex: 1; padding: 12px 16px; border-radius: 8px; border: none; font-size: 15px; cursor: pointer; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:disabled { background: #bfbfbf; cursor: not-allowed; }
+    .btn-ghost { background: transparent; color: var(--primary); border: 1px solid var(--primary);  display: inline-flex; align-items: center; justify-content: center; }
+    .btn-ghost:hover { background: #f0f8ff; }
+    .info { padding: 12px 14px; background: #fffbe6; border-left: 4px solid #ffd666; border-radius: 6px; color: #614700; margin-bottom: 14px; }
+    .error { padding: 12px 14px; background: #fff2f0; border-left: 4px solid #ff4d4f; border-radius: 6px; color: #a8071a; margin-bottom: 14px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-title">完善个人信息（信息只允许完善一次，请确认无误后提交）</div>
+
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    {% set completed = (user_info and user_info.profile_completed) %}
+    {% if completed %}
+      <div class="info">您已完成信息完善，若信息有误请联系管理员进行修改。</div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('profile') }}">
+      <div class="grid">
+        <div class="field single">
+          <label>注册用户名（唯一，不能修改）</label>
+          <div style="font-size:16px; font-weight:600; padding:12px 14px; background:#f2f4f7; border-radius:8px; border:1px solid #e6e9ef;">{{ current_user.username }}</div>
+        </div>
+
+        <div class="field">
+          <label for="name">姓名</label>
+          <input id="name" name="name" type="text" placeholder="如：张三" value="{{ user_info.name if user_info else current_user.get('name','') }}" {% if completed %}disabled{% endif %}>
+        </div>
+
+        <div class="field">
+          <label for="gender">性别</label>
+          <select id="gender" name="gender" {% if completed %}disabled{% endif %}>
+            <option value="" {% if not user_info or not user_info.gender %}selected{% endif %}>请选择</option>
+            <option value="男" {% if user_info and user_info.gender=='男' %}selected{% endif %}>男</option>
+            <option value="女" {% if user_info and user_info.gender=='女' %}selected{% endif %}>女</option>
+            <option value="其他" {% if user_info and user_info.gender=='其他' %}selected{% endif %}>其他</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="faculty">院系</label>
+          <input id="faculty" name="faculty" type="text" placeholder="如：网络安全学院" value="" {% if completed %}disabled{% endif %}>
+        </div>
+
+        <div class="field">
+          <label for="major">专业</label>
+          <input id="major" name="major" type="text" placeholder="如：网络安全与执法" value="" {% if completed %}disabled{% endif %}>
+        </div>
+
+        <div class="field">
+          <label for="student_no">学号</label>
+          <input id="student_no" name="student_no" type="text" placeholder="如：20253502140101" value="" {% if completed %}disabled{% endif %}>
+        </div>
+
+        <div class="field">
+          <label for="grade">年级</label>
+          <input id="grade" name="grade" type="text" placeholder="如：2025" value="" {% if completed %}disabled{% endif %}>
+        </div>
+
+        <div class="field">
+          <label for="class_name">班级</label>
+          <input id="class_name" name="class_name" type="text" placeholder="如：2025网络安全与执法实验班/一区队" value="" {% if completed %}disabled{% endif %}>
+        </div>
+
+        <div class="field single">
+          <label for="phone">联系电话</label>
+          <input id="phone" name="phone" type="tel" placeholder="如：13800138000" value="" {% if completed %}disabled{% endif %}>
+        </div>
+      </div>
+
+      <div class="button_row">
+        <button type="submit" class="btn btn-primary" {% if completed %}disabled{% endif %}>保存</button>
+        <a href="{{ url_for('user_dashboard') }}" class="btn btn-ghost" style="text-decoration: none;">取消</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

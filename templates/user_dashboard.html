@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户面板 - 请假系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .user-info {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .user-info p {
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .user-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 15px;
+            background: #f9f9f9;
+            border: 2px solid #e8e8e8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #333;
+        }
+        
+        .menu-item:hover {
+            background: #f0f0f0;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+        }
+        
+        .menu-item .icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .menu-item .label {
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .footer {
+            padding: 20px;
+            background: #f5f5f5;
+            text-align: center;
+            border-top: 1px solid #e8e8e8;
+        }
+        
+        .logout-btn {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #666;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            transition: background 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #333;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e8e8e8;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>📋 请假管理中心</h1>
+                <p>学生用户面板</p>
+            </div>
+            
+            <div class="content">
+                <div class="user-info">
+                    <p>欢迎，</p>
+                    <p class="user-name">{{ current_user.name }}</p>
+                </div>
+                
+                <div class="menu">
+                    <a href="/apply" class="menu-item">
+                        <div class="icon">📝</div>
+                        <div class="label">申请请假</div>
+                    </a>
+                    <a href="/h_manage" class="menu-item" onclick="sessionStorage.setItem('hide_app_crumb','true');">
+                        <div class="icon">📋</div>
+                        <div class="label">我的请假</div>
+                    </a>
+                    <a href="/profile" class="menu-item">
+                        <div class="icon">🧾</div>
+                        <div class="label">完善信息</div>
+                    </a>
+                    <a href="/import_history" class="menu-item">
+                        <div class="icon">📥</div>
+                        <div class="label">导入历史</div>
+                    </a>
+                    <a href="/user_settings" class="menu-item">
+                        <div class="icon">⚙️</div>
+                        <div class="label">用户设置</div>
+                    </a>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value">-</div>
+                        <div class="stat-label">待审核</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">-</div>
+                        <div class="stat-label">已通过</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">-</div>
+                        <div class="stat-label">已拒绝</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <a href="/logout" class="logout-btn">登出</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

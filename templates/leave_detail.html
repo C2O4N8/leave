@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html data-scale="true" class=" " style="font-size: 85.3333px;">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1">
+    <title>请假管理</title>
+    
+    <!-- 必要的样式依赖 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='umi.1f521cdb.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='layouts__userLayout.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='p__user__login.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='layouts__tabBarLayout.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='p__tabbar__homePage__index.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='p__tabbar__affairs__index.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='layouts__basicLayout.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='p__sm-holiday__student__details2__index.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors.1659e841.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors.2a42e354.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors.31ecd969.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors.323d67b2.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors.33e35537.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors.678f84af.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors.cfbf0a2e.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors.91f4305a.1f521cdb.chunk.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors.a2e6a083.1f521cdb.chunk.css') }}">
+    <!-- 移动端适配脚本 -->
+    <script>
+      window.casStatus = 'false' === 'true' ? true : false;
+      window.casLogoutUrl = 'https://cas.gdppla.edu.cn/lyuapServer/logout?service=https://lyxgqj.gdppla.edu.cn/';
+      window.casLoginUrl = '';
+      window.gateway_version = '';
+      window.password_regular = '';
+      window.openEncrypt = 'false' === 'true' ? true : false;
+      if ('production' !== 'development') {
+        window._AMapSecurityConfig = {
+          serviceHost: window.location.origin + window.location.pathname + '_AMapService',
+        }
+      }
+    </script>
+    <script>
+        var win = window;
+        window.vl = function(baseFontSize, psdWidth, maxWidth) {
+            var _baseFontSize = baseFontSize || 100;
+            var _psdWidth = psdWidth || 750;
+            var _maxWidth = maxWidth || 640;
+            var doc = win.document;
+            var docEl = doc.documentElement;
+            var rate = 1;
+            var metaEl = doc.querySelector('meta[name="viewport"]');
+            
+            if (!metaEl) {
+                metaEl = doc.createElement("meta");
+                metaEl.setAttribute("name", "viewport");
+                doc.head.appendChild(metaEl);
+            }
+            metaEl.setAttribute(
+                "content",
+                "width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1"
+            );
+
+            var setFontSize = function() {
+                var clientWidth = docEl.clientWidth;
+                clientWidth = clientWidth > _maxWidth ? _maxWidth : clientWidth;
+                docEl.style.fontSize = `${(_baseFontSize / _psdWidth) * clientWidth * rate}px`;
+            };
+            
+            setFontSize();
+            var resizeEvt = "orientationchange" in window ? "orientationchange" : "resize";
+            win.addEventListener(resizeEvt, setFontSize, false);
+            doc.addEventListener("DOMContentLoaded", setFontSize, false);
+        };
+        vl(100, 750);
+    </script>
+
+    <!-- 必要的脚本依赖 -->
+    <script src="{{ url_for('static', filename='antd-icons.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='layouts__basicLayout.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='layouts__tabBarLayout.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='layouts__userLayout.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='p__sm-holiday__student__details2__index.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='p__sm-holiday__student__details2__model.js.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='p__sm-holiday__student__indexApply.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='p__sm-holiday__student__model.js.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='p__tabbar__affairs__index.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='p__tabbar__homePage__index.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='p__user__login.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='serverconfig.js') }}"></script>
+    <script src="{{ url_for('static', filename='umi.1f521cdb.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.12f98ce0.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.1659e841.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.29ebc05c.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.2a42e354.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.31ecd969.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.323d67b2.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.33e35537.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.4ca9c48c.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.678f84af.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.690b702c.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.73914085.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.748942c6.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.91f4305a.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.a2e6a083.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.b5906859.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.b9cf3951.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.cfbf0a2e.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.db300d2f.1f521cdb.chunk.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors.ec648836.1f521cdb.chunk.js') }}"></script>
+</head>
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="__ANTD_MOBILE_SVG_SPRITE_NODE__" style="display:none;overflow:hidden;width:0;height:0">
+        <defs>
+            <symbol id="right" viewBox="0 0 44 44">
+                <defs><path id="a" d="M-129-845h24v24h-24z"></path></defs>
+                <clippath id="b"><use xlink:href="#a" overflow="visible"></use></clippath>
+                <g clip-path="url(#b)"><defs><path id="c" d="M-903-949H947V996H-903z"></path></defs></g>
+                <path d="M30.6 21.4L18.37 9.165l-2.12 2.12 10.117 10.12-10.118 10.118 2.12 2.12 12.234-12.232-.005-.006z"></path>
+            </symbol>
+            <symbol id="check-circle-o" viewBox="0 0 48 48">
+                <g fill-rule="evenodd">
+                    <path d="M24 48c13.255 0 24-10.745 24-24S37.255 0 24 0 0 10.745 0 24s10.745 24 24 24zm0-3c11.598 0 21-9.402 21-21S35.598 3 24 3 3 12.402 3 24s9.402 21 21 21z"></path>
+                    <path d="M12.2 23.2L10 25.3l10 9.9L37.2 15 35 13 19.8 30.8z"></path>
+                </g>
+            </symbol>
+        </defs>
+    </svg>
+
+    <noscript>Sorry, we need js to run correctly!</noscript>
+    <div id="root">
+        <div class="page_basic_layout___233lr">
+            <div class="page_basic_position_container___3Lkcg">
+                <div class="page_basic_position_fixed___1BROP">
+
+                    <div class="page_basic_position_item___31NO8" id="homeLink" style="cursor: pointer;">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAu9JREFUWEfVlm9oTWEcx7+/h/2TnXOvmiEJIaklrOZSUhS38II2L7xY2fLKXhBitbuzsxohXvBqISkvEC82NYqS4rGySSsJIS2zrdx77sS2y/PT2Wzhnnvvee6m5XlzT/d5vt/vp9/5nd85hCleNMX5+L8AltRwXlEwvpOZdwii1Qye61aQQD2KuZOIWvqjxq0352jIb2V9V2B9xNmjwE0AFmQw/yBAtY9s86ofiIwAa/ZxTu7cgfNgtc+P4fgZEs3DPYX7O5opkU6XESAUiV8AVJVW+PhhcVHaRnXWAKFIvApQF7ILH1OJamkbF1N5pKzA+iP9hSo/5zWA4okBoFcMJpY+Olk04OWTEiBkxfdCKU9yAp6ToNocDD10TRPI28CKmxhY6QkrRJW0jEt6ABGnBeDtHqL7w5/ehDuaS/9orpFmneO0AdiUrKFWaZs7NAFibwEsShIxr5aNwWdeZqG66CoQdXrsvZN2YLEuwDcA+X+LAlEzvy3FoAnXcF4s6Ax6BA1KO1CgCeD0AVw0ORWgfmmbs/UA6p1WMG+blB4gvi0bgl79lPpltDYSrSTQ5RTUmk8BVUrLvKJXgQNcgELnPQDP0mnMhj4MmAvlWXJ7KmmlHcUhK34ISp3SCEs+KsRhaRmntSehK1hhcW6A413MvCwbCCJ6FSOj5IVFw1kBuKKQ5WyFYnfA6C9BYWmZd9IJM74NRyDqY9fAqNAiIFyXDYHdmTT+ACxnFpTqAmheJsPRff4IIUqkZX7OdN4XwEgVIs4WMLe5319pTRkMorC0zbuZwt193wCjtyJ+HKyOpjUmcUI2GMf8hGsDlJfztO7lzj0QNnoGMB7Mf2luvnGDfvwTANe0rPZLMU1PPCXQ/N9DGNzN33NK25tm9voN167AmHFZXWyNILgfIzN+/fdVMTa0NwY6dMKzBnCF6yKxXQq47l4LoOKxHbipGz4hAFe8ti5+0P190micySZ8wgDZhv6u03oMJyPwb48pB/gJPRgJMPDa2JsAAAAASUVORK5CYII=" style="width: 16px; height: 16px;">
+                        <span class="undefined first___q8L32">首页</span>
+                        <svg class="am-icon am-icon-right am-icon-md" color="#cccccc"><use xlink:href="#right"></use></svg>
+                    </div>
+
+                    <!-- 应用面包屑 - 从应用页面进入时显示 -->
+                    <div id="appCrumb" class="page_basic_position_item___31NO8" style="display: none;">
+                        <span class="undefined">应用</span>
+                        <svg class="am-icon am-icon-right am-icon-md" color="#cccccc"><use xlink:href="#right"></use></svg>
+                    </div>
+
+                    <div class="page_basic_position_item___31NO8">
+                      <a href="{{ url_for('h_manage') }}" style="text-decoration: none; color: inherit;">
+                        <span class="undefined ">请假管理</span>
+                      </a>
+                      <svg class="am-icon am-icon-right am-icon-md" color="#cccccc"><use xlink:href="#right"></use></svg>
+                    </div>
+
+                    <div class="page_basic_position_item___31NO8">
+                        <span class="undefined ">请假管理</span>
+                    </div>
+                </div>
+            </div>
+            <div class="transitionWrapper___LPf4r">
+                <div style="position: absolute; width: 100%; height: 100%;" class="">
+                    <div style="margin-bottom: 24px;">
+                        <div class="titleBox___JiRXx">
+                            <div>
+                                <div class="avatar___kub4U">
+                                    <img src="{{ url_for('static', filename='getStudentPhoto') }}" alt="">
+                                </div>
+                                <div class="info___z_Lvm">
+                                    <div class="title___2B62j">
+                                        <img class="icon___2hoOs" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAABBVBMVEUAAAAA//8AgP8Aqv8AgP8Amf8rgP8gn/8amf8Xi/8Vlf8RiP8Ykv8Vlf8Uj/8cjv8bkv8ajf8akf8Xk/8Vjv8bjf8Ykv8Xjv8bj/8akv8Yjv8Wkf8aj/8akf8Zkv8ZkP8Yj/8XkP8Xkf8ZkP8Zj/8Zkf8YkP8Xj/8Zkf8XkP8Ykf8Ykf8YkP8ZkP8Xkf8ZkP8XkP8YkP8YkP8Xj/8YkP8XkP8YkP8YkP8YkP8YkP8YkP8YkP8XkP8YkP8YkP8Ykf8YkP8YkP8YkP8Yj/8YkP8YkP8XkP8YkP8YkP8YkP8XkP8Ykf8YkP8YkP8YkP8YkP8YkP8YkP8YkP8YkP8YkP8YkP8YkP9us06oAAAAVnRSTlMAAQIDBAUGCAoLDA8VGBkbHB0eISQmKi0wMTY6OzxGR0lOT1NbXV5kZm50dnd8hIeOlZaZn6O8vb7DysvP1NfZ3N3f4OHj5Ojs7u/w8fL09fb3+Pn8/riutKkAAADfSURBVBgZpcHpOgJhAIbhV5hS2SZL1rKTLVsZUWOXEinP+R+Kmb5pMP64Lvet/9qoXXuucoqq0XOuqDN6HEUNLbh4HIVik9kxSYkSPkeBqZMn4O7QLgEVcGSsv2F0geIylNWziaf90MFXlHVUXpIv8w7uqqXk9jM0EwqdgpuWb7YBBfVZLcjLKMCl+qahHpNhQ9dSYBGqCgwAKQVm4GVYRgY66htswJqMfagodAz3tnzzr7Cj0HgTHrdSGt1rwU1cX1a6eNp4Wll9l69j3M7pp/RBFT4udpP6bWQirj/5BCOYOCBx2OKPAAAAAElFTkSuQmCC" alt="">
+                                    </div>
+                                    <div class="class___3KDBS"> | </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-whitespace am-whitespace-md"></div>
+                        <div class="detialBox___1X_BF">
+                            <div class="Headertitle___2h9Hi">请假信息</div>
+                            <div class="detialLine___3dSsI">
+                                <div class="title___2B62j">请假类型：</div>
+                                <span class="value___XOCYG">{{ leave.leave_type }}</span>
+                            </div>
+                            <div class="detialLine___3dSsI">
+                                <div class="title___2B62j">请假去向：</div>
+                                <span class="value___XOCYG"></span>
+                            </div>
+                            <div class="detialLine___3dSsI">
+                                <div class="title___2B62j">详细地址：</div>
+                                <span class="value___XOCYG"></span>
+                            </div>
+                            <div class="detialLine___3dSsI">
+                                <div class="title___2B62j">开始时间：</div>
+                                <span class="value___XOCYG">{{ leave.start_time.strftime('%Y-%m-%d %H:%M:%S') if leave.start_time else '' }}</span>
+                            </div>
+                            <div class="detialLine___3dSsI">
+                                <div class="title___2B62j">结束时间：</div>
+                                <span class="value___XOCYG">{{ leave.end_time.strftime('%Y-%m-%d %H:%M:%S') if leave.end_time else '' }}</span>
+                            </div>
+                            <div class="detialLine___3dSsI">
+                                <div class="title___2B62j">统计时长：</div>
+                                <span class="value___XOCYG">天小时分钟</span>
+                            </div>
+                            <div class="detialLine___3dSsI">
+                                <div class="title___2B62j">紧急联系人：</div>
+                                <span class="value___XOCYG"></span>
+                            </div>
+                            <div class="detialLine___3dSsI">
+                                <div class="title___2B62j">紧急联系人电话：</div>
+                                <span class="value___XOCYG"></span>
+                            </div>
+                            <div class="detialLine___3dSsI">
+                                <div class="title___2B62j">请假理由：</div>
+                                <span class="value___XOCYG">{{ leave.reason }}</span>
+                            </div>
+                            <div class="detialLine___3dSsI">
+                                <div class="title___2B62j">请假状态：</div>
+                                <span class="{% if leave.status == 'approved' %}value_2___2Pirt{% elif leave.status == 'rejected' %}value_3___rejected{% elif leave.status == 'pending' %}value_4___pending{% elif leave.status == 'invalidated' %}value_2___2Pirt{% endif %}">
+                                    {% if leave.status == 'approved' or leave.status == 'invalidated' %}审核通过{% elif leave.status == 'rejected' %}审核不通过{% elif leave.status == 'pending' %}审核中{% endif %}
+                            </div>
+                            <div class="detialLine___3dSsI">
+                                <div class="title___2B62j">销假状态：</div>
+                                <span class="value___XOCYG"></span>
+                            </div>
+                            <div class="detialLineImg___26VH8">
+                                <div class="title___2B62j">请假附件：</div>
+                                <span class="value___XOCYG">
+                                    <div class="NHUpload">
+                                        <div class="uploadContent"></div>
+                                    </div>
+                                </span>
+                            </div>
+                            {% if leave.status == 'approved' %}
+                                <img class="imgType___15G4R" src="{{ url_for('static', filename='icon_pass.png') }}" alt="">
+                            {% elif leave.status == 'invalidated' %}
+                                <img class="imgType___15G4R" src="{{ url_for('static', filename='icon_yxj.png') }}" alt="">
+                            {% endif %}
+                        </div>
+
+                        <div class="am-whitespace am-whitespace-md"></div>
+
+                        <div class="container___2I1fm">
+                            <div class="header___BDU7V">
+                                <div class="header_title___Rg5Zq">办理进度</div>
+                            </div>
+                            <div class="am-steps am-steps-vertical am-steps-small">
+                                <div class="am-steps-item am-steps-item-finish am-steps-item-custom">
+                                    <div class="am-steps-item-tail"></div>
+                                    <div class="am-steps-item-icon">
+                                        <span class="am-steps-icon">
+                                            <svg class="am-icon am-icon-check-circle-o am-icon-xs">
+                                                <use xlink:href="#check-circle-o"></use>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div class="am-steps-item-content">
+                                        <div class="am-steps-item-title">
+                                            <div class="step_header___2nUJN">
+                                                <div class="step_title___3yKU2">申请
+                                                    <span style="color: rgb(50, 223, 114); margin-left: 8px; font-weight: 550;">申请</span>
+                                                </div>
+                                                <div class="step_time___1Qq-E">{{ leave.created_at.strftime('%Y-%m-%d %H:%M:%S') if leave.created_at else '' }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="am-steps-item-description">
+                                            <div class="content___2vXvj">
+                                                <div class="text_content___12qib">
+                                                    <div class="grayText___1PS9X">{{ leave.student_name }}</div>
+                                                    <div class="statusText___2Hktr"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% if leave.status == 'pending' %}
+
+                                <div class="am-steps-item am-steps-item-finish am-steps-item-custom">
+                                    <div class="am-steps-item-tail"></div>
+                                    <div class="am-steps-item-icon">
+                                        <span class="am-steps-icon">
+                                            <svg class="am-icon am-icon-check-circle-o am-icon-xs">
+                                                <use xlink:href="#check-circle-o"></use>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div class="am-steps-item-content">
+                                        <div class="am-steps-item-title">
+                                            <div class="step_header___2nUJN">
+                                                <div class="step_title___3yKU2">辅导员审核
+                                                    <span style="color: rgb(24, 144, 255); margin-left: 8px; font-weight: 550;">审核中</span></div>
+                                                <div class="step_time___1Qq-E">{{ leave.approved_at.strftime('%Y-%m-%d %H:%M:%S') if leave.approved_at else '' }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="am-steps-item-description">
+                                            <div class="content___2vXvj">
+                                                <div class="text_content___12qib">
+                                                    <div class="grayText___1PS9X">{{ approver_name or leave.approver_name or '未指定' }}</div>
+                                                    <div class="statusText___2Hktr"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% elif leave.status == 'approved' or leave.status == 'invalidated' %}
+
+                                <div class="am-steps-item am-steps-item-finish am-steps-item-custom">
+                                    <div class="am-steps-item-tail"></div>
+                                    <div class="am-steps-item-icon">
+                                        <span class="am-steps-icon">
+                                            <svg class="am-icon am-icon-check-circle-o am-icon-xs">
+                                                <use xlink:href="#check-circle-o"></use>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div class="am-steps-item-content">
+                                        <div class="am-steps-item-title">
+                                            <div class="step_header___2nUJN">
+                                                <div class="step_title___3yKU2">辅导员审核
+                                                    <span style="color: rgb(50, 223, 114); margin-left: 8px; font-weight: 550;">审核通过</span>
+                                                </div>
+                                                <div class="step_time___1Qq-E">{{ leave.approved_at.strftime('%Y-%m-%d %H:%M:%S') if leave.approved_at else '' }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="am-steps-item-description">
+                                            <div class="content___2vXvj">
+                                                <div class="text_content___12qib">
+                                                    <div class="grayText___1PS9X">{{ approver_name or leave.approver_name or '未指定' }}</div>
+                                                    <div class="statusText___2Hktr"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="am-steps-item am-steps-item-process am-steps-item-custom">
+                                    <div class="am-steps-item-tail"></div>
+                                    <div class="am-steps-item-icon">
+                                        <span class="am-steps-icon">
+                                            <div class="last_step___4mg46">
+                                                <span></span>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <div class="am-steps-item-content">
+                                        <div class="am-steps-item-title">
+                                            <div class="step_header___2nUJN">
+                                                <div class="step_title___3yKU2">结束
+                                                    <span style="color: rgb(50, 223, 114); margin-left: 8px; font-weight: 550;"></span>
+                                                </div>
+                                                <div class="step_time___1Qq-E"></div>
+                                            </div>
+                                        </div>
+                                        <div class="am-steps-item-description">
+                                            <div class="content___2vXvj">
+                                                <div class="text_content___12qib">
+                                                    <div class="grayText___1PS9X"></div>
+                                                    <div class="statusText___2Hktr"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% elif leave.status == 'rejected' %}
+                                <div class="am-steps-item am-steps-item-finish am-steps-item-custom">
+                                    <div class="am-steps-item-tail"></div>
+                                    <div class="am-steps-item-icon">
+                                        <span class="am-steps-icon">
+                                            <svg class="am-icon am-icon-check-circle-o am-icon-xs">
+                                                <use xlink:href="#check-circle-o"></use>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div class="am-steps-item-content">
+                                        <div class="am-steps-item-title">
+                                            <div class="step_header___2nUJN">
+                                                <div class="step_title___3yKU2">辅导员审核
+                                                    <span style="color: rgb(255, 77, 79); margin-left: 8px; font-weight: 550;">审核不通过</span></div>
+                                                <div class="step_time___1Qq-E">{{ leave.approved_at.strftime('%Y-%m-%d %H:%M:%S') if leave.approved_at else '' }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="am-steps-item-description">
+                                            <div class="content___2vXvj">
+                                                <div class="text_content___12qib">
+                                                    <div class="grayText___1PS9X">{{ approver_name or leave.approver_name or '未指定' }}</div>
+                                                    <div class="statusText___2Hktr"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                      {% if leave.status == 'invalidated' %}
+                      <div>
+                        <div class="am-whitespace am-whitespace-md"></div>
+                        <div class="detialBox___1X_BF">
+                          <div class="Headertitle___2h9Hi">销假信息</div>
+                          <div class="detialLineImg___26VH8">
+                            <div class="title___2B62j">销假状态：</div>
+                            <span class="value___XOCYG"></span>
+                          </div>
+                          <div class="detialLineImg___26VH8">
+                            <div class="title___2B62j">销假时间：</div>
+                            <span class="value___XOCYG"></span>
+                          </div>
+                        </div>
+                      </div>
+                      {% endif %}
+                      <div class="am-whitespace am-whitespace-md"></div>
+                      <div class="am-whitespace am-whitespace-md"></div>
+                      <div class="am-whitespace am-whitespace-md"></div>
+                      <div class="am-whitespace am-whitespace-md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="adm-px-tester" style="--size: 10;"></div>
+    
+    <script>
+        // 处理首页链接 - 检查安全模式
+        document.addEventListener('DOMContentLoaded', function() {
+            const homeLink = document.getElementById('homeLink');
+            if (homeLink) {
+                homeLink.addEventListener('click', function() {
+                    fetch('/api/get_safety_mode_for_page')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.safety_mode_enabled && data.target_url) {
+                                // 安全模式已启用，直接跳转到目标网站
+                                window.location.href = data.target_url;
+                            } else {
+                                // 安全模式未启用，跳转到首页
+                                window.location.href = '/home';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('获取安全模式设置失败:', error);
+                            window.location.href = '/home';
+                        });
+                });
+            }
+        });
+        
+        // 处理应用面包屑 - 默认显示，只有从用户面板进入时隐藏
+        document.addEventListener('DOMContentLoaded', function() {
+            const appCrumb = document.getElementById('appCrumb');
+            if (appCrumb) {
+                // 检查是否从用户面板进入（需要隐藏应用面包屑）
+                if (sessionStorage.getItem('hide_app_crumb') === 'true') {
+                    appCrumb.style.display = 'none';
+                    // 不清除标记，保持状态传递
+                }
+                
+                // 点击应用面包屑返回应用页面
+                appCrumb.addEventListener('click', function() {
+                    sessionStorage.removeItem('hide_app_crumb'); // 返回应用页面时清除标记
+                    window.location.href = '/home_apps';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

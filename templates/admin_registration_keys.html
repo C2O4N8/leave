@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>注册秘钥管理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        
+        .back-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border: 1px solid #667eea;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .back-link:hover {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        .card h2 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-icon {
+            width: 30px;
+            height: 30px;
+            background-color: #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        button, .button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background-color: #ecf0f1;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d5dbdb;
+        }
+        
+        .alert {
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-left: 4px solid;
+        }
+        
+        .alert-error {
+            background-color: #fadbd8;
+            border-color: #e74c3c;
+            color: #c0392b;
+        }
+        
+        .alert-success {
+            background-color: #d5f4e6;
+            border-color: #27ae60;
+            color: #1e8449;
+        }
+        
+        .alert-info {
+            background-color: #ecf0f1;
+            border-color: #3498db;
+            color: #2874a6;
+        }
+        
+        .key-display {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .key-display .label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .key-display .value {
+            color: #333;
+            font-size: 14px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            word-break: break-all;
+            margin-top: 8px;
+            padding: 12px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: all 0.3s;
+            cursor: text;
+        }
+        
+        .key-display .value:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .copy-button {
+            background-color: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.3s;
+        }
+        
+        .copy-button:hover {
+            background-color: #5568d3;
+        }
+        
+        .copy-button.copied {
+            background-color: #27ae60;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        table thead {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-unused {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-used {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .instructions {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .instructions h4 {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .instructions code {
+            background-color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #c7254e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 注册秘钥管理</h1>
+            <a href="{{ url_for('admin_dashboard') }}" class="back-link">← 返回管理员面板</a>
+        </div>
+        
+        <div class="content">
+            <!-- 左侧：生成秘钥 -->
+            <div class="card">
+                <h2>
+                    <span class="card-icon">⚙️</span>
+                    生成新秘钥
+                </h2>
+                
+                {% if error %}
+                <div class="alert alert-error">{{ error }}</div>
+                {% endif %}
+                
+                {% if success %}
+                <div class="alert alert-success">✓ 秘钥生成成功！已显示在下方。</div>
+                
+                <div class="key-display">
+                    <div class="label">用户名</div>
+                    <div class="value">{{ username }}</div>
+                </div>
+                
+                <div class="key-display">
+                    <div class="label">秘钥（请转发给用户）</div>
+                    <div class="value" id="keyValue">{{ generated_key }}</div>
+                    <button class="copy-button" onclick="copyToClipboard()">📋 复制秘钥</button>
+                </div>
+                
+                <div class="key-display">
+                    <div class="label">盐值（管理员参考）</div>
+                    <div class="value" style="font-size: 12px;">{{ salt }}</div>
+                </div>
+                {% endif %}
+                
+                <div class="instructions">
+                    <h4>使用步骤：</h4>
+                    <ol>
+                        <li>输入要为其生成秘钥的用户名</li>
+                        <li>点击"生成秘钥"按钮</li>
+                        <li>复制显示的秘钥</li>
+                        <li>将秘钥转发给用户进行注册验证</li>
+                    </ol>
+                </div>
+                
+                <form method="POST">
+                    <div class="form-group">
+                        <label for="username">用户名 <span style="color: #e74c3c;">*</span></label>
+                        <input type="text" id="username" name="username" 
+                               placeholder="输入用户名（如：student001）" required
+                               value="{{ username if success else '' }}">
+                    </div>
+                    
+                    <button type="submit" class="btn-primary" style="width: 100%;">生成秘钥</button>
+                </form>
+            </div>
+            
+            <!-- 右侧：秘钥历史 -->
+            <div class="card">
+                <h2>
+                    <span class="card-icon">📊</span>
+                    秘钥历史
+                </h2>
+                
+                <div class="alert alert-info">
+                    📌 最近生成的50个秘钥。秘钥为一次性使用，使用后状态变为"已使用"。
+                </div>
+                
+                {% if keys_history %}
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>用户名</th>
+                                <th>生成时间</th>
+                                <th>状态</th>
+                                <th>使用时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for key in keys_history %}
+                            <tr>
+                                <td><strong>{{ key.username }}</strong></td>
+                                <td>{{ key.generated_at.strftime('%Y-%m-%d %H:%M:%S') if key.generated_at else '-' }}</td>
+                                <td>
+                                    {% if key.is_used %}
+                                    <span class="status-badge status-used">✓ 已使用</span>
+                                    {% else %}
+                                    <span class="status-badge status-unused">⏳ 未使用</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ key.used_at.strftime('%Y-%m-%d %H:%M:%S') if key.used_at else '-' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    还没有生成过秘钥。生成秘钥后将显示在此列表中。
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function copyToClipboard() {
+            const keyValue = document.getElementById('keyValue').textContent;
+            navigator.clipboard.writeText(keyValue).then(() => {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '✓ 已复制！';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                alert('复制失败，请手动复制');
+            });
+        }
+    </script>
+</body>
+</html>
